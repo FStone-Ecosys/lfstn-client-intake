@@ -12,6 +12,8 @@
       --taupe: #9c968c;
       --gold: #c9a66b;
       --surface: #171815;
+      --magenta: #e0007a;
+      --cyan: #00e5ff;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -29,52 +31,28 @@
       font-size: 1.75rem;
       font-weight: 500;
       letter-spacing: -0.02em;
+      background: linear-gradient(90deg, var(--cyan), var(--magenta));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
-    .sub {
-      color: var(--taupe);
-      margin-top: 0.25rem;
-      font-size: 0.95rem;
-    }
-    main {
-      max-width: 640px;
-      margin: 0 auto;
-      padding: 2rem 1.5rem 4rem;
-    }
-    .options {
-      display: grid;
-      gap: 1rem;
-      margin: 2rem 0;
-    }
+    .sub { color: var(--taupe); margin-top: 0.25rem; font-size: 0.95rem; }
+    main { max-width: 680px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+    .options { display: grid; gap: 1rem; margin: 2rem 0; }
     .option {
       background: var(--surface);
       border: 1px solid #2a2a28;
       border-radius: 8px;
       padding: 1.25rem 1.5rem;
       cursor: pointer;
-      transition: border-color 0.15s;
+      transition: all 0.15s;
     }
-    .option:hover, .option.selected {
-      border-color: var(--sage);
-    }
-    .option h3 {
-      font-size: 1.1rem;
-      margin-bottom: 0.25rem;
-    }
-    .option p {
-      color: var(--taupe);
-      font-size: 0.9rem;
-    }
-    form {
-      display: none;
-      margin-top: 1.5rem;
-    }
-    form.active { display: block; }
-    label {
-      display: block;
-      margin: 1rem 0 0.35rem;
-      font-size: 0.85rem;
-      color: var(--taupe);
-    }
+    .option:hover { border-color: var(--cyan); }
+    .option.selected { border-color: var(--magenta); box-shadow: 0 0 0 1px var(--magenta); }
+    .option h3 { font-size: 1.1rem; margin-bottom: 0.25rem; }
+    .option p { color: var(--taupe); font-size: 0.9rem; }
+    .lane { display: none; margin-top: 2rem; }
+    .lane.active { display: block; }
+    label { display: block; margin: 1rem 0 0.35rem; font-size: 0.85rem; color: var(--taupe); }
     input, textarea, select {
       width: 100%;
       background: #111110;
@@ -84,22 +62,29 @@
       border-radius: 6px;
       font: inherit;
     }
-    textarea { min-height: 100px; resize: vertical; }
+    textarea { min-height: 90px; resize: vertical; }
     button {
-      background: var(--sage);
+      background: linear-gradient(90deg, var(--cyan), var(--magenta));
       color: var(--ink);
       border: none;
       padding: 0.85rem 1.5rem;
       border-radius: 6px;
-      font-weight: 500;
+      font-weight: 600;
       cursor: pointer;
       margin-top: 1.5rem;
     }
-    button:hover { opacity: 0.9; }
+    button:hover { opacity: 0.92; }
+    .back {
+      background: transparent;
+      color: var(--cyan);
+      border: 1px solid var(--cyan);
+      margin-right: 0.75rem;
+      font-weight: 500;
+    }
     .success {
       display: none;
       background: var(--surface);
-      border: 1px solid var(--sage);
+      border: 1px solid var(--magenta);
       padding: 1.5rem;
       border-radius: 8px;
       margin-top: 2rem;
@@ -113,70 +98,110 @@
     <p class="sub">Client Intake</p>
   </header>
   <main>
-    <p>Tell us what you need. Choose the lane, then give us the details so we can return a clear quote.</p>
-
-    <div class="options">
-      <div class="option" data-type="brand">
-        <h3>Brand & Identity</h3>
-        <p>Logo, colours, type, positioning, brand systems.</p>
-      </div>
-      <div class="option" data-type="web">
-        <h3>Website / Digital</h3>
-        <p>New site, rebuild, app, shop, or immersive experience.</p>
-      </div>
-      <div class="option" data-type="content">
-        <h3>Content & Motion</h3>
-        <p>Campaigns, stills, animation, social systems.</p>
-      </div>
-      <div class="option" data-type="music">
-        <h3>Music / Artist</h3>
-        <p>Release campaigns, visuals, audio-visual systems.</p>
-      </div>
-      <div class="option" data-type="other">
-        <h3>Something else</h3>
-        <p>Automations, retainers, or a mix.</p>
+    <div id="chooser">
+      <p>Tell us what you need. Choose the lane, then answer the specific questions so we can return a clear quote.</p>
+      <div class="options">
+        <div class="option" data-lane="brand"><h3>Brand & Identity</h3><p>Logo, colours, type, positioning, brand systems.</p></div>
+        <div class="option" data-lane="web"><h3>Website / Digital</h3><p>New site, rebuild, app, shop, or immersive experience.</p></div>
+        <div class="option" data-lane="content"><h3>Content & Motion</h3><p>Campaigns, stills, animation, social systems.</p></div>
+        <div class="option" data-lane="music"><h3>Music / Artist</h3><p>Release campaigns, visuals, audio-visual systems.</p></div>
+        <div class="option" data-lane="other"><h3>Something else</h3><p>Automations, retainers, or a mix.</p></div>
       </div>
     </div>
 
-    <form id="intake">
-      <label>Your name *</label>
-      <input name="name" required>
+    <!-- Brand -->
+    <div class="lane" id="lane-brand">
+      <h2>Brand & Identity</h2>
+      <form class="intake-form" data-lane="brand">
+        <label>Your name *</label><input name="name" required>
+        <label>Email *</label><input type="email" name="email" required>
+        <label>Phone / WhatsApp</label><input name="phone">
+        <label>Brand / Company name</label><input name="project">
+        <label>What exists already? (logo, colours, site, nothing)</label><textarea name="existing"></textarea>
+        <label>Desired direction / references</label><textarea name="direction" placeholder="Mood, references, what it should feel like."></textarea>
+        <label>Deliverables needed</label><textarea name="deliverables" placeholder="Logo, guidelines, social kit, etc."></textarea>
+        <label>Timeline</label><select name="timeline"><option>As soon as possible</option><option>This month</option><option>Next 1–3 months</option><option>Flexible</option></select>
+        <label>Budget range</label><select name="budget"><option>Under R5 000</option><option>R5 000 – R15 000</option><option>R15 000 – R50 000</option><option>R50 000+</option><option>Not sure yet</option></select>
+        <label>Anything else?</label><textarea name="extra"></textarea>
+        <button type="button" class="back">Back</button>
+        <button type="submit">Send intake</button>
+      </form>
+    </div>
 
-      <label>Email *</label>
-      <input type="email" name="email" required>
+    <!-- Web -->
+    <div class="lane" id="lane-web">
+      <h2>Website / Digital</h2>
+      <form class="intake-form" data-lane="web">
+        <label>Your name *</label><input name="name" required>
+        <label>Email *</label><input type="email" name="email" required>
+        <label>Phone / WhatsApp</label><input name="phone">
+        <label>Project / Site name</label><input name="project">
+        <label>Current site (if any)</label><input name="current" placeholder="URL or none">
+        <label>What do you need? (new build, rebuild, shop, app…)</label><textarea name="need" required></textarea>
+        <label>Key pages / features</label><textarea name="features"></textarea>
+        <label>Tech preferences or constraints</label><input name="tech">
+        <label>Timeline</label><select name="timeline"><option>As soon as possible</option><option>This month</option><option>Next 1–3 months</option><option>Flexible</option></select>
+        <label>Budget range</label><select name="budget"><option>Under R5 000</option><option>R5 000 – R15 000</option><option>R15 000 – R50 000</option><option>R50 000+</option><option>Not sure yet</option></select>
+        <label>Anything else?</label><textarea name="extra"></textarea>
+        <button type="button" class="back">Back</button>
+        <button type="submit">Send intake</button>
+      </form>
+    </div>
 
-      <label>Phone / WhatsApp</label>
-      <input name="phone">
+    <!-- Content -->
+    <div class="lane" id="lane-content">
+      <h2>Content & Motion</h2>
+      <form class="intake-form" data-lane="content">
+        <label>Your name *</label><input name="name" required>
+        <label>Email *</label><input type="email" name="email" required>
+        <label>Phone / WhatsApp</label><input name="phone">
+        <label>Campaign / Project name</label><input name="project">
+        <label>What are we making? (stills, animation, social system, campaign)</label><textarea name="need" required></textarea>
+        <label>References or existing assets</label><textarea name="references"></textarea>
+        <label>Platforms / formats</label><input name="platforms" placeholder="IG, TikTok, web, etc.">
+        <label>Timeline</label><select name="timeline"><option>As soon as possible</option><option>This month</option><option>Next 1–3 months</option><option>Flexible</option></select>
+        <label>Budget range</label><select name="budget"><option>Under R5 000</option><option>R5 000 – R15 000</option><option>R15 000 – R50 000</option><option>R50 000+</option><option>Not sure yet</option></select>
+        <label>Anything else?</label><textarea name="extra"></textarea>
+        <button type="button" class="back">Back</button>
+        <button type="submit">Send intake</button>
+      </form>
+    </div>
 
-      <label>Company / Project name</label>
-      <input name="project">
+    <!-- Music -->
+    <div class="lane" id="lane-music">
+      <h2>Music / Artist</h2>
+      <form class="intake-form" data-lane="music">
+        <label>Your name *</label><input name="name" required>
+        <label>Email *</label><input type="email" name="email" required>
+        <label>Phone / WhatsApp</label><input name="phone">
+        <label>Artist / Project name</label><input name="project">
+        <label>What do you need? (release visuals, campaign, identity, motion)</label><textarea name="need" required></textarea>
+        <label>Current releases / links</label><textarea name="links"></textarea>
+        <label>Visual direction</label><textarea name="direction"></textarea>
+        <label>Timeline</label><select name="timeline"><option>As soon as possible</option><option>This month</option><option>Next 1–3 months</option><option>Flexible</option></select>
+        <label>Budget range</label><select name="budget"><option>Under R5 000</option><option>R5 000 – R15 000</option><option>R15 000 – R50 000</option><option>R50 000+</option><option>Not sure yet</option></select>
+        <label>Anything else?</label><textarea name="extra"></textarea>
+        <button type="button" class="back">Back</button>
+        <button type="submit">Send intake</button>
+      </form>
+    </div>
 
-      <label>What do you need? *</label>
-      <textarea name="need" required placeholder="Describe the project, goals, and what success looks like."></textarea>
-
-      <label>Timeline</label>
-      <select name="timeline">
-        <option>As soon as possible</option>
-        <option>This month</option>
-        <option>Next 1–3 months</option>
-        <option>Flexible</option>
-      </select>
-
-      <label>Budget range</label>
-      <select name="budget">
-        <option>Under R5 000</option>
-        <option>R5 000 – R15 000</option>
-        <option>R15 000 – R50 000</option>
-        <option>R50 000+</option>
-        <option>Not sure yet</option>
-      </select>
-
-      <label>Anything else we should know?</label>
-      <textarea name="extra"></textarea>
-
-      <input type="hidden" name="type" id="type">
-      <button type="submit">Send intake</button>
-    </form>
+    <!-- Other -->
+    <div class="lane" id="lane-other">
+      <h2>Something else</h2>
+      <form class="intake-form" data-lane="other">
+        <label>Your name *</label><input name="name" required>
+        <label>Email *</label><input type="email" name="email" required>
+        <label>Phone / WhatsApp</label><input name="phone">
+        <label>Project name</label><input name="project">
+        <label>What do you need?</label><textarea name="need" required></textarea>
+        <label>Timeline</label><select name="timeline"><option>As soon as possible</option><option>This month</option><option>Next 1–3 months</option><option>Flexible</option></select>
+        <label>Budget range</label><select name="budget"><option>Under R5 000</option><option>R5 000 – R15 000</option><option>R15 000 – R50 000</option><option>R50 000+</option><option>Not sure yet</option></select>
+        <label>Anything else?</label><textarea name="extra"></textarea>
+        <button type="button" class="back">Back</button>
+        <button type="submit">Send intake</button>
+      </form>
+    </div>
 
     <div class="success" id="success">
       <h3>Specs received.</h3>
@@ -185,31 +210,41 @@
   </main>
 
   <script>
-    const options = document.querySelectorAll('.option');
-    const form = document.getElementById('intake');
-    const typeInput = document.getElementById('type');
+    const chooser = document.getElementById('chooser');
+    const lanes = document.querySelectorAll('.lane');
     const success = document.getElementById('success');
 
-    options.forEach(opt => {
+    document.querySelectorAll('.option').forEach(opt => {
       opt.addEventListener('click', () => {
-        options.forEach(o => o.classList.remove('selected'));
+        document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
         opt.classList.add('selected');
-        typeInput.value = opt.dataset.type;
-        form.classList.add('active');
-        form.scrollIntoView({ behavior: 'smooth' });
+        const lane = opt.dataset.lane;
+        chooser.style.display = 'none';
+        lanes.forEach(l => l.classList.remove('active'));
+        document.getElementById('lane-' + lane).classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     });
 
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      // For now, open mailto with structured body. Replace with backend later.
-      const data = new FormData(form);
-      const body = [...data.entries()].map(([k,v]) => `${k}: ${v}`).join('\n');
-      const subject = encodeURIComponent('LFSTN.STUDIO Client Intake — ' + (data.get('project') || data.get('name')));
-      const mailto = `mailto:studio@lfstn.xyz?subject=${subject}&body=${encodeURIComponent(body)}`;
-      window.location.href = mailto;
-      form.style.display = 'none';
-      success.classList.add('active');
+    document.querySelectorAll('.back').forEach(btn => {
+      btn.addEventListener('click', () => {
+        lanes.forEach(l => l.classList.remove('active'));
+        chooser.style.display = 'block';
+        document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+      });
+    });
+
+    document.querySelectorAll('.intake-form').forEach(form => {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const data = new FormData(form);
+        data.append('lane', form.dataset.lane);
+        const body = [...data.entries()].map(([k,v]) => `${k}: ${v}`).join('\n');
+        const subject = encodeURIComponent('LFSTN.STUDIO Client Intake — ' + (data.get('project') || data.get('name') || form.dataset.lane));
+        window.location.href = `mailto:studio@lfstn.xyz?subject=${subject}&body=${encodeURIComponent(body)}`;
+        form.closest('.lane').style.display = 'none';
+        success.classList.add('active');
+      });
     });
   </script>
 </body>
