@@ -112,7 +112,10 @@
     <!-- Brand -->
     <div class="lane" id="lane-brand">
       <h2>Brand & Identity</h2>
-      <form class="intake-form" data-lane="brand">
+      <form class="intake-form" data-lane="brand" action="https://formsubmit.co/studio@lfstn.xyz" method="POST">
+        <input type="hidden" name="_subject" value="LFSTN.STUDIO Client Intake — Brand">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="lane" value="brand">
         <label>Your name *</label><input name="name" required>
         <label>Email *</label><input type="email" name="email" required>
         <label>Phone / WhatsApp</label><input name="phone">
@@ -131,7 +134,10 @@
     <!-- Web -->
     <div class="lane" id="lane-web">
       <h2>Website / Digital</h2>
-      <form class="intake-form" data-lane="web">
+      <form class="intake-form" data-lane="web" action="https://formsubmit.co/studio@lfstn.xyz" method="POST">
+        <input type="hidden" name="_subject" value="LFSTN.STUDIO Client Intake — Web">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="lane" value="web">
         <label>Your name *</label><input name="name" required>
         <label>Email *</label><input type="email" name="email" required>
         <label>Phone / WhatsApp</label><input name="phone">
@@ -151,7 +157,10 @@
     <!-- Content -->
     <div class="lane" id="lane-content">
       <h2>Content & Motion</h2>
-      <form class="intake-form" data-lane="content">
+      <form class="intake-form" data-lane="content" action="https://formsubmit.co/studio@lfstn.xyz" method="POST">
+        <input type="hidden" name="_subject" value="LFSTN.STUDIO Client Intake — Content">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="lane" value="content">
         <label>Your name *</label><input name="name" required>
         <label>Email *</label><input type="email" name="email" required>
         <label>Phone / WhatsApp</label><input name="phone">
@@ -170,7 +179,10 @@
     <!-- Music -->
     <div class="lane" id="lane-music">
       <h2>Music / Artist</h2>
-      <form class="intake-form" data-lane="music">
+      <form class="intake-form" data-lane="music" action="https://formsubmit.co/studio@lfstn.xyz" method="POST">
+        <input type="hidden" name="_subject" value="LFSTN.STUDIO Client Intake — Music">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="lane" value="music">
         <label>Your name *</label><input name="name" required>
         <label>Email *</label><input type="email" name="email" required>
         <label>Phone / WhatsApp</label><input name="phone">
@@ -189,7 +201,10 @@
     <!-- Other -->
     <div class="lane" id="lane-other">
       <h2>Something else</h2>
-      <form class="intake-form" data-lane="other">
+      <form class="intake-form" data-lane="other" action="https://formsubmit.co/studio@lfstn.xyz" method="POST">
+        <input type="hidden" name="_subject" value="LFSTN.STUDIO Client Intake — Other">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="lane" value="other">
         <label>Your name *</label><input name="name" required>
         <label>Email *</label><input type="email" name="email" required>
         <label>Phone / WhatsApp</label><input name="phone">
@@ -236,14 +251,12 @@
 
     document.querySelectorAll('.intake-form').forEach(form => {
       form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const data = new FormData(form);
-        data.append('lane', form.dataset.lane);
-        const body = [...data.entries()].map(([k,v]) => `${k}: ${v}`).join('\n');
-        const subject = encodeURIComponent('LFSTN.STUDIO Client Intake — ' + (data.get('project') || data.get('name') || form.dataset.lane));
-        window.location.href = `mailto:studio@lfstn.xyz?subject=${subject}&body=${encodeURIComponent(body)}`;
-        form.closest('.lane').style.display = 'none';
-        success.classList.add('active');
+        // Let the form submit normally to FormSubmit (emails studio@lfstn.xyz)
+        // Then show success after a short delay if needed; FormSubmit redirects by default.
+        setTimeout(() => {
+          form.closest('.lane').style.display = 'none';
+          success.classList.add('active');
+        }, 500);
       });
     });
   </script>
